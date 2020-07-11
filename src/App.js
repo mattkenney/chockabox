@@ -1,26 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import Container from 'react-bulma-components/lib/components/container';
+import Navbar from 'react-bulma-components/lib/components/navbar';
+import Section from 'react-bulma-components/lib/components/section';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+
+import './App.sass';
+
+function About() {
+    return <div>About</div>;
+}
+
+function Home() {
+    return <div>Welcome!</div>;
+}
+
+function Nav() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Navbar>
+      <Navbar.Brand>
+        <Navbar.Item renderAs='span'><Link to="/">Chockabox</Link></Navbar.Item>
+      </Navbar.Brand>
+      <Navbar.Menu>
+        <Navbar.Container>
+          <Navbar.Item renderAs='span'><Link to="/deck">Decks</Link></Navbar.Item>
+          <Navbar.Item renderAs='span'><Link to="/about">About</Link></Navbar.Item>
+        </Navbar.Container>
+      </Navbar.Menu>
+    </Navbar>
   );
 }
 
-export default App;
+function Content() {
+  return (
+    <Section>
+      <Container>
+        <Switch>
+          <Route path="/about" component={About}/>
+          <Route component={Home}/>
+        </Switch>
+      </Container>
+    </Section>
+  );
+}
+
+export default function App()
+{
+  return (
+    <Router>
+      <Nav/>
+      <Content/>
+    </Router>
+  );
+}
