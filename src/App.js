@@ -3,7 +3,7 @@ import React from 'react';
 import Container from 'react-bulma-components/lib/components/container';
 import Navbar from 'react-bulma-components/lib/components/navbar';
 import Section from 'react-bulma-components/lib/components/section';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 import './App.sass';
 
@@ -47,9 +47,9 @@ function Content() {
 export default function App()
 {
   return (
-    <Router>
+    <>
       <Nav/>
       <Content/>
-    </Router>
+    </>
   );
 }
