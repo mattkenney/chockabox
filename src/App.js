@@ -6,28 +6,37 @@ import Section from 'react-bulma-components/lib/components/section';
 import { Link, Route, Switch } from 'react-router-dom';
 
 import './App.sass';
+import Decks from './Decks';
 
 function About() {
-    return <div>About</div>;
+  return <div>About</div>;
 }
 
 function Home() {
-    return <div>Welcome!</div>;
+  return <div>Welcome!</div>;
 }
 
 function Nav() {
   return (
     <Navbar>
       <Navbar.Brand>
-        <Navbar.Item renderAs='span'><Link to="/">Chockabox</Link></Navbar.Item>
+        <NavbarItem><Link to="/">Chockabox</Link></NavbarItem>
       </Navbar.Brand>
       <Navbar.Menu>
         <Navbar.Container>
-          <Navbar.Item renderAs='span'><Link to="/deck">Decks</Link></Navbar.Item>
-          <Navbar.Item renderAs='span'><Link to="/about">About</Link></Navbar.Item>
+          <NavbarItem><Link to="/deck">Decks</Link></NavbarItem>
+          <NavbarItem><Link to="/about">About</Link></NavbarItem>
         </Navbar.Container>
       </Navbar.Menu>
     </Navbar>
+  );
+}
+
+function NavbarItem(props) {
+  return (
+    <Navbar.Item renderAs="span">
+      {' '}{props.children}{' '}
+    </Navbar.Item>
   );
 }
 
@@ -37,6 +46,7 @@ function Content() {
       <Container>
         <Switch>
           <Route path="/about" component={About}/>
+          <Route path="/deck" component={Decks}/>
           <Route component={Home}/>
         </Switch>
       </Container>

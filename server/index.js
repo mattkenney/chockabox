@@ -19,6 +19,14 @@ const path = require('path');
 const build = path.join(path.dirname(__dirname), 'build');
 app.use(express.static(build, { index: false, redirect: false }));
 
+// set up GraphQL
+const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
+const typeDefs = require('./typeDefs');
+const resolvers = require('./resolvers');
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+const server = new ApolloServer({ schema });
+server.applyMiddleware({ app, cors: false });
+
 // server-side render React app
 const fs = require('fs');
 const ssr = require('../dist/server-side-render').default;
@@ -27,7 +35,7 @@ const root = '<div id="root">';
 const [ prelude, coda ] = fs.readFileSync(template, 'utf8').split(root, 2);
 
 app.use(function (req, res) {
-  ssr(req)
+  ssr(req, schema)
     .then(content => {
       const html = [ prelude, root, content, coda ].join('');
       res.send(html);

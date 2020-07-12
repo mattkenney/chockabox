@@ -2,6 +2,8 @@
 
 const path = require('path');
 
+var nodeExternals = require('webpack-node-externals');
+
 module.exports = {
   entry: {
     'server-side-render': './src/server-side-render.js'
@@ -16,6 +18,9 @@ module.exports = {
     __filename: false
   },
   mode: 'none',
+  externals: [nodeExternals({ allowlist: [
+    /^react-bulma-components(\/|$)/
+  ]})],
   module: {
     rules: [
       {
