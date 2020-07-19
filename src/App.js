@@ -7,6 +7,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 
 import './App.sass';
 import Decks from './Decks';
+import Login from './Login';
 
 function About() {
   return <div>About</div>;
@@ -46,6 +47,7 @@ function Content() {
       <Container>
         <Switch>
           <Route path="/about" component={About}/>
+          <Route path="/login" component={Login}/>
           <Route path="/deck" component={Decks}/>
           <Route component={Home}/>
         </Switch>

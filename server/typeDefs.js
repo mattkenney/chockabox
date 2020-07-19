@@ -7,5 +7,6 @@ module.exports = `
 
   type Mutation {
     mutate: String!
+    sendToken(email: String!): String
   }
 `;

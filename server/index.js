@@ -24,7 +24,13 @@ const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  context: ({ req }) => ({
+    origin: req.protocol + '://' + req.get('host'),
+    user: req.user
+  }),
+  schema
+});
 server.applyMiddleware({ app, cors: false });
 
 // server-side render React app
@@ -34,6 +40,7 @@ const template = path.join(build, 'index.html');
 const root = '<div id="root">';
 const [ prelude, coda ] = fs.readFileSync(template, 'utf8').split(root, 2);
 
+app.use(express.urlencoded({ extended: false }));
 app.use(function (req, res) {
   ssr(req, schema)
     .then(content => {
