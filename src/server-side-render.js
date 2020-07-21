@@ -15,7 +15,13 @@ import { MutationSSR, mutateSSR } from './MutationForm';
 export default function (req, schema) {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: new SchemaLink({ schema }),
+    link: new SchemaLink({
+      context: {
+        origin: req.protocol + '://' + req.get('host'),
+        user: req.user
+      },
+      schema
+    }),
     ssrMode: true
   });
 

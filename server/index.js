@@ -19,10 +19,16 @@ const path = require('path');
 const build = path.join(path.dirname(__dirname), 'build');
 app.use(express.static(build, { index: false, redirect: false }));
 
+// use cookie session
+const config = require('../config.json');
+app.use(require('cookie-session')(config.session))
+
 // set up GraphQL
 const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 const typeDefs = require('./typeDefs');
-const resolvers = require('./resolvers');
+const merge = require('deepmerge');
+let resolvers = require('./resolvers');
+resolvers = merge(resolvers, require('./auth')(app));
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const server = new ApolloServer({
   context: ({ req }) => ({
