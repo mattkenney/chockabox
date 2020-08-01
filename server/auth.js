@@ -50,9 +50,21 @@ module.exports = app => {
     })
   };
 
+  function auth(obj, args, context) {
+    return !!context.user;
+  }
+
   function verifyUser(req, args) {
     return args;
   }
+
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
 
   passport.use(new MagicLinkStrategy({
     passReqToCallbacks: true,
@@ -61,5 +73,23 @@ module.exports = app => {
     tokenField: 'token'
   }, sendEmail, verifyUser));
 
-  return { Mutation: { sendToken } };
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  const acceptToken = passport.authenticate('magiclink', {
+    action : 'acceptToken',
+    failureRedirect: '/login'
+  });
+  app.use((req, res, next) => {
+    if (req.query.token)
+    {
+      return acceptToken(req, res, next);
+    }
+    next();
+  });
+
+  return {
+    Mutation: { sendToken },
+    Query: { auth }
+  };
 };

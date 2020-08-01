@@ -2,6 +2,7 @@
 
 module.exports = `
   type Query {
+    auth: Boolean!
     hello: String!
   }
 

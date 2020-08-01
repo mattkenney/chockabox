@@ -1,13 +1,13 @@
 import React from 'react';
 
 import Container from 'react-bulma-components/lib/components/container';
-import Navbar from 'react-bulma-components/lib/components/navbar';
 import Section from 'react-bulma-components/lib/components/section';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import './App.sass';
 import Decks from './Decks';
 import Login from './Login';
+import Nav from './Nav';
 
 function About() {
   return <div>About</div>;
@@ -15,30 +15,6 @@ function About() {
 
 function Home() {
   return <div>Welcome!</div>;
-}
-
-function Nav() {
-  return (
-    <Navbar>
-      <Navbar.Brand>
-        <NavbarItem><Link to="/">Chockabox</Link></NavbarItem>
-      </Navbar.Brand>
-      <Navbar.Menu>
-        <Navbar.Container>
-          <NavbarItem><Link to="/deck">Decks</Link></NavbarItem>
-          <NavbarItem><Link to="/about">About</Link></NavbarItem>
-        </Navbar.Container>
-      </Navbar.Menu>
-    </Navbar>
-  );
-}
-
-function NavbarItem(props) {
-  return (
-    <Navbar.Item renderAs="span">
-      {' '}{props.children}{' '}
-    </Navbar.Item>
-  );
 }
 
 function Content() {
@@ -56,8 +32,7 @@ function Content() {
   );
 }
 
-export default function App()
-{
+export default function App() {
   return (
     <>
       <Nav/>
