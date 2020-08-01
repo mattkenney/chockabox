@@ -5,10 +5,10 @@ import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-const USER = gql`query USER { user }`;
+const AUTH = gql`query AUTH { auth }`;
 
 export default function Nav() {
-  const { data, error } = useQuery(USER);
+  const { data, error } = useQuery(AUTH);
   if (error) console.log(error);
   return (
     <Navbar>

@@ -25,15 +25,9 @@ module.exports = app => {
       },
     });
 
-    return new Promise((resolve, reject) => {
-      smtp.send(message, (err, message) => {
-        if (err) {
-          console.log(err, message);
-          return reject(err);
-        }
-        resolve(message.to);
-      });
-    });
+    smtp.send(message, err => err && console.log(err, message));
+
+    return message.to;
   }
 
   function sendToken(obj, args, context) {
