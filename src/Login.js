@@ -6,8 +6,9 @@ import { Field, Control, Label, Input } from 'react-bulma-components/lib/compone
 import { useLocation } from "react-router-dom";
 
 import Errors from './Errors';
-import MutationForm, { RedirectSSR, useMutationSSR } from './MutationForm';
+import MutationForm from './MutationForm';
 import { ACCEPT_TOKEN, AUTH, SEND_TOKEN } from './auth';
+import { RedirectSSR, useMutationSSR } from './ServerSideRender';
 
 function useParams() {
   return new URLSearchParams(useLocation().search);

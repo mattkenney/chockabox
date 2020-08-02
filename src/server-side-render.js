@@ -10,7 +10,7 @@ import { StaticRouter } from "react-router-dom";
 import { getDataFromTree } from '@apollo/react-ssr';
 
 import App from './App';
-import { MutationSSR, ssrMutate, ssrRedirect } from './MutationForm';
+import { ContextSSR, ssrMutate, ssrRedirect } from './ServerSideRender';
 
 export default function (req, res, schema) {
   const client = new ApolloClient({
@@ -28,11 +28,11 @@ export default function (req, res, schema) {
 
   const app = (
     <ApolloProvider client={client}>
-      <MutationSSR request={req}>
+      <ContextSSR.Provider value={req}>
         <StaticRouter location={req.url}>
           <App/>
         </StaticRouter>
-      </MutationSSR>
+      </ContextSSR.Provider>
     </ApolloProvider>
   );
 
