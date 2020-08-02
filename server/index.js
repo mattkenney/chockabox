@@ -32,6 +32,7 @@ resolvers = merge(resolvers, require('./auth')(app));
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 const server = new ApolloServer({
   context: ({ req }) => ({
+    login: req.login.bind(req),
     origin: req.protocol + '://' + req.get('host'),
     user: req.user
   }),

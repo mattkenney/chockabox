@@ -1,44 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import gql from 'graphql-tag';
 import Button from 'react-bulma-components/lib/components/button';
 import Notification from 'react-bulma-components/lib/components/notification';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
-import { useLocation } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
+import { useMutation } from '@apollo/react-hooks';
 
 import Errors from './Errors';
 import MutationForm, { useMutationSSR } from './MutationForm';
 
-const SEND_TOKEN = gql`mutation sendToken($email: String!) { sendToken(email: $email) }`;
+const ACCEPT_TOKEN = gql`mutation ACCEPT_TOKEN($token: String!) {
+  acceptToken(token: $token)
+}`;
+
+const SEND_TOKEN = gql`mutation SEND_TOKEN($email: String!) {
+  sendToken(email: $email)
+}`;
 
 function useParams() {
   return new URLSearchParams(useLocation().search);
 }
 
 export default function Login() {
-  const [ sendToken, { data, error, loading } ] = useMutationSSR(SEND_TOKEN);
+  const params = useParams();
+
+  if (params.has('token')) {
+    return <LoginAcceptToken token={params.get('token')}/>;
+  }
+
+  return <LoginSendToken/>;
+}
+
+function LoginAcceptToken(props) {
+  const [ acceptToken, { data, error, loading } ] = useMutation(ACCEPT_TOKEN);
+  const variables = { token: props.token };
+  const effect = () => { acceptToken({ variables }); };
+  useEffect(effect, []);
 
   if (loading) return null;
   if (error) return <Errors error={error}/>;
-  if (data) return <LoginSent data={data}/>;
+  if (data && data.acceptToken) return <Redirect to='/'/>;
 
-  return (
-    <MutationForm mutate={sendToken}>
-      <LoginForm/>
-    </MutationForm>
-  );
+  return <LoginSendToken message='Sorry, that link is expired or invalid.'/>;
 }
 
-function LoginForm() {
+function LoginForm(props) {
   const [ email, setEmail ] = useState('');
-
-  const params = useParams();
 
   return (
     <>
-      {params.has('token') &&
+      {props.message &&
         <Notification color='warning'>
-          Sorry, that link is expired or invalid.
+          {props.message}
         </Notification>
       }
       <Notification>
@@ -58,6 +72,20 @@ function LoginForm() {
       </Field>
       <Button color='primary' type='submit'>Send Login Link</Button>
     </>
+  );
+}
+
+function LoginSendToken() {
+  const [ sendToken, { data, error, loading } ] = useMutationSSR(SEND_TOKEN);
+
+  if (loading) return null;
+  if (error) return <Errors error={error}/>;
+  if (data) return <LoginSent data={data}/>;
+
+  return (
+    <MutationForm mutate={sendToken}>
+      <LoginForm/>
+    </MutationForm>
   );
 }
 

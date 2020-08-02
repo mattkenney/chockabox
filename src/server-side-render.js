@@ -17,6 +17,7 @@ export default function (req, schema) {
     cache: new InMemoryCache(),
     link: new SchemaLink({
       context: {
+        login: req.login.bind(req),
         origin: req.protocol + '://' + req.get('host'),
         user: req.user
       },
