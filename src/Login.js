@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bulma-components/lib/components/button';
 import Notification from 'react-bulma-components/lib/components/notification';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
-import { Redirect, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import Errors from './Errors';
-import MutationForm, { useMutationSSR } from './MutationForm';
+import MutationForm, { RedirectSSR, useMutationSSR } from './MutationForm';
 import { ACCEPT_TOKEN, AUTH, SEND_TOKEN } from './auth';
 
 function useParams() {
@@ -33,7 +33,7 @@ function LoginAcceptToken({ token }) {
   if (loading) return null;
   if (error) return <Errors error={error}/>;
   if (!data) return null;
-  if (data.acceptToken) return <Redirect to='/'/>;
+  if (data.acceptToken) return <RedirectSSR to='/'/>;
   return <LoginSendToken message='Sorry, that link is expired or invalid.'/>;
 }
 

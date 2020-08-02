@@ -1,24 +1,32 @@
 import React, { useContext } from 'react';
 
-import { useLocation } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { useMutation } from '@apollo/react-hooks';
 
 const MutationContext = React.createContext({});
 
-export function mutateSSR(req, client) {
-  if (!req._mutation) return Promise.resolve();
-  if ((/^POST$/i).test(req.method)) {
-    return client.mutate({
-      mutation: req._mutation,
-      variables: req.body
-    }).then(result => (req._tuple = [ null, result ]));
-  } else if (Object.keys(req.query).length) {
-    return client.mutate({
-      mutation: req._mutation,
-      variables: req.query
-    }).then(result => (req._tuple = [ null, result ]));
+export function ssrMutate(req, client) {
+  if (req._mutation) {
+    if ((/^POST$/i).test(req.method)) {
+      return client.mutate({
+        mutation: req._mutation,
+        variables: req.body
+      }).then(result => (req._tuple = [ null, result ]));
+    } else if (Object.keys(req.query).length) {
+      return client.mutate({
+        mutation: req._mutation,
+        variables: req.query
+      }).then(result => (req._tuple = [ null, result ]));
+    }
   }
-  return Promise.resolve();
+}
+
+export function ssrRedirect(req, res, html) {
+  if (req._redirect) {
+    res.redirect(req._redirect);
+    return;
+  }
+  return html;
 }
 
 export function useMutationSSR(mutation)
@@ -57,4 +65,10 @@ export function MutationSSR(props) {
       {props.children}
     </MutationContext.Provider>
   );
+}
+
+export function RedirectSSR(props) {
+  const req = useContext(MutationContext);
+  req._redirect = props.to;
+  return <Redirect {...props}/>;
 }

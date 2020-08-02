@@ -10,9 +10,9 @@ import { StaticRouter } from "react-router-dom";
 import { getDataFromTree } from '@apollo/react-ssr';
 
 import App from './App';
-import { MutationSSR, mutateSSR } from './MutationForm';
+import { MutationSSR, ssrMutate, ssrRedirect } from './MutationForm';
 
-export default function (req, schema) {
+export default function (req, res, schema) {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: new SchemaLink({
@@ -37,12 +37,14 @@ export default function (req, schema) {
   );
 
   return getDataFromTree(app)
-    .then(() => mutateSSR(req, client))
+    .then(() => ssrMutate(req, client))
     .then(() => [
       '<script>',
       'window.__APOLLO_STATE__=',
       serialize(client.extract()),
       '</script>',
       ReactDOMServer.renderToString(app)
-    ].join(''));
+    ].join(''))
+    .then(html => ssrRedirect(req, res, html))
+    ;
 }

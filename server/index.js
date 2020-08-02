@@ -49,8 +49,9 @@ const [ prelude, coda ] = fs.readFileSync(template, 'utf8').split(root, 2);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(function (req, res) {
-  ssr(req, schema)
+  ssr(req, res, schema)
     .then(content => {
+      if (!content) return;
       const html = [ prelude, root, content, coda ].join('');
       res.send(html);
     })
