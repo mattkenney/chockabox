@@ -9,6 +9,10 @@ const config = require('../config.json');
 const smtp = new emailjs.SMTPClient(config.smtp);
 
 module.exports = app => {
+  function auth(obj, args, context) {
+    return !!context.user;
+  }
+
   function sendEmail(req, user, token) {
     const origin = config.origin || req.origin;
     const tokenParam = encodeURIComponent(token);
@@ -44,10 +48,6 @@ module.exports = app => {
     })
   };
 
-  function auth(obj, args, context) {
-    return !!context.user;
-  }
-
   function verifyUser(req, args) {
     return args;
   }
@@ -72,7 +72,8 @@ module.exports = app => {
 
   const acceptToken = passport.authenticate('magiclink', {
     action : 'acceptToken',
-    failureRedirect: '/login'
+    failureRedirect: '/login?token=',
+    successRedirect: '/'
   });
   app.use((req, res, next) => {
     if (req.query.token)

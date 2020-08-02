@@ -4,11 +4,16 @@ import gql from 'graphql-tag';
 import Button from 'react-bulma-components/lib/components/button';
 import Notification from 'react-bulma-components/lib/components/notification';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
+import { useLocation } from "react-router-dom";
 
 import Errors from './Errors';
 import MutationForm, { useMutationSSR } from './MutationForm';
 
 const SEND_TOKEN = gql`mutation sendToken($email: String!) { sendToken(email: $email) }`;
+
+function useParams() {
+  return new URLSearchParams(useLocation().search);
+}
 
 export default function Login() {
   const [ sendToken, { data, error, loading } ] = useMutationSSR(SEND_TOKEN);
@@ -27,9 +32,18 @@ export default function Login() {
 function LoginForm() {
   const [ email, setEmail ] = useState('');
 
+  const params = useParams();
+
   return (
     <>
-      <Notification>Enter your email address and we will send you a link to sign in.</Notification>
+      {params.has('token') &&
+        <Notification color='warning'>
+          Sorry, that link is expired or invalid.
+        </Notification>
+      }
+      <Notification>
+        Enter your email address and we will send you a link to sign in.
+      </Notification>
       <Field>
         <Label>Email Address</Label>
         <Control>

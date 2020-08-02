@@ -1,5 +1,6 @@
 import React from 'react';
 
+import 'core-js/web/url-search-params';
 import Container from 'react-bulma-components/lib/components/container';
 import Section from 'react-bulma-components/lib/components/section';
 import { Route, Switch } from 'react-router-dom';
