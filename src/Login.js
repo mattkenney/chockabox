@@ -23,28 +23,28 @@ export default function Login() {
   return <LoginSendToken/>;
 }
 
-function LoginAcceptToken(props) {
+function LoginAcceptToken({ token }) {
   const [ acceptToken, { data, error, loading } ] = useMutationSSR(ACCEPT_TOKEN);
-  const variables = { token: props.token };
+  const variables = { token };
   const refetchQueries = [ { query: AUTH } ];
   const effect = () => { acceptToken({ refetchQueries, variables }); };
   useEffect(effect, []);
 
   if (loading) return null;
   if (error) return <Errors error={error}/>;
-  if (data && data.acceptToken) return <Redirect to='/'/>;
-
+  if (!data) return null;
+  if (data.acceptToken) return <Redirect to='/'/>;
   return <LoginSendToken message='Sorry, that link is expired or invalid.'/>;
 }
 
-function LoginForm(props) {
+function LoginForm({ message }) {
   const [ email, setEmail ] = useState('');
 
   return (
     <>
-      {props.message &&
+      {message &&
         <Notification color='warning'>
-          {props.message}
+          {message}
         </Notification>
       }
       <Notification>
@@ -67,7 +67,7 @@ function LoginForm(props) {
   );
 }
 
-function LoginSendToken() {
+function LoginSendToken({ message }) {
   const [ sendToken, { data, error, loading } ] = useMutationSSR(SEND_TOKEN);
 
   if (loading) return null;
@@ -76,7 +76,7 @@ function LoginSendToken() {
 
   return (
     <MutationForm mutate={sendToken}>
-      <LoginForm/>
+      <LoginForm message={message}/>
     </MutationForm>
   );
 }
