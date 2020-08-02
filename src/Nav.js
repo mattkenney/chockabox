@@ -1,11 +1,10 @@
 import React from 'react';
 
 import Navbar from 'react-bulma-components/lib/components/navbar';
-import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-const AUTH = gql`query AUTH { auth }`;
+import { AUTH } from './auth';
 
 export default function Nav() {
   const { data, error } = useQuery(AUTH);

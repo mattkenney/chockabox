@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import gql from 'graphql-tag';
 import Button from 'react-bulma-components/lib/components/button';
 import Notification from 'react-bulma-components/lib/components/notification';
 import { Field, Control, Label, Input } from 'react-bulma-components/lib/components/form';
 import { Redirect, useLocation } from "react-router-dom";
-import { useMutation } from '@apollo/react-hooks';
 
 import Errors from './Errors';
 import MutationForm, { useMutationSSR } from './MutationForm';
-
-const ACCEPT_TOKEN = gql`mutation ACCEPT_TOKEN($token: String!) {
-  acceptToken(token: $token)
-}`;
-
-const SEND_TOKEN = gql`mutation SEND_TOKEN($email: String!) {
-  sendToken(email: $email)
-}`;
+import { ACCEPT_TOKEN, AUTH, SEND_TOKEN } from './auth';
 
 function useParams() {
   return new URLSearchParams(useLocation().search);
@@ -33,9 +24,10 @@ export default function Login() {
 }
 
 function LoginAcceptToken(props) {
-  const [ acceptToken, { data, error, loading } ] = useMutation(ACCEPT_TOKEN);
+  const [ acceptToken, { data, error, loading } ] = useMutationSSR(ACCEPT_TOKEN);
   const variables = { token: props.token };
-  const effect = () => { acceptToken({ variables }); };
+  const refetchQueries = [ { query: AUTH } ];
+  const effect = () => { acceptToken({ refetchQueries, variables }); };
   useEffect(effect, []);
 
   if (loading) return null;

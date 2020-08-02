@@ -6,10 +6,16 @@ import { useMutation } from '@apollo/react-hooks';
 const MutationContext = React.createContext({});
 
 export function mutateSSR(req, client) {
-  if (req._mutation && (/^POST$/i).test(req.method)) {
+  if (!req._mutation) return Promise.resolve();
+  if ((/^POST$/i).test(req.method)) {
     return client.mutate({
       mutation: req._mutation,
       variables: req.body
+    }).then(result => (req._tuple = [ null, result ]));
+  } else if (Object.keys(req.query).length) {
+    return client.mutate({
+      mutation: req._mutation,
+      variables: req.query
     }).then(result => (req._tuple = [ null, result ]));
   }
   return Promise.resolve();
