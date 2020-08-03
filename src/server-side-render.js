@@ -12,17 +12,10 @@ import { getDataFromTree } from '@apollo/react-ssr';
 import App from './App';
 import { ContextSSR, ssrMutate, ssrRedirect } from './ServerSideRender';
 
-export default function (req, res, schema) {
+export default function (req, res, context, schema) {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: new SchemaLink({
-      context: {
-        login: req.login.bind(req),
-        origin: req.protocol + '://' + req.get('host'),
-        user: req.user
-      },
-      schema
-    }),
+    link: new SchemaLink({ context, schema }),
     ssrMode: true
   });
 

@@ -29,15 +29,14 @@ const typeDefs = require('./typeDefs');
 const merge = require('deepmerge');
 let resolvers = require('./resolvers');
 resolvers = merge(resolvers, require('./auth')(app));
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-const server = new ApolloServer({
-  context: ({ req }) => ({
-    login: req.login.bind(req),
-    origin: req.protocol + '://' + req.get('host'),
-    user: req.user
-  }),
-  schema
+const context = ({ req }) => ({
+  login: req.login.bind(req),
+  logout: req.logout.bind(req),
+  origin: req.protocol + '://' + req.get('host'),
+  user: req.user
 });
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+const server = new ApolloServer({ context, schema });
 server.applyMiddleware({ app, cors: false });
 
 // server-side render React app
@@ -49,7 +48,7 @@ const [ prelude, coda ] = fs.readFileSync(template, 'utf8').split(root, 2);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(function (req, res) {
-  ssr(req, res, schema)
+  ssr(req, res, context({ req }), schema)
     .then(content => {
       if (!content) return;
       const html = [ prelude, root, content, coda ].join('');
