@@ -8,7 +8,6 @@ import { Route, Switch } from 'react-router-dom';
 import './App.sass';
 import Decks from './Decks';
 import Login from './Login';
-import Logout from './Logout';
 import Nav from './Nav';
 
 function About() {
@@ -26,7 +25,6 @@ function Content() {
         <Switch>
           <Route path="/about" component={About}/>
           <Route path="/login" component={Login}/>
-          <Route path="/logout" component={Logout}/>
           <Route path="/deck" component={Decks}/>
           <Route component={Home}/>
         </Switch>

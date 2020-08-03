@@ -24,7 +24,7 @@ export default function Nav() {
             <NavbarItem><Link to="/login">Sign In</Link></NavbarItem>
           }
           {data && data.auth &&
-            <NavbarItem><Link to="/logout">Sign Out</Link></NavbarItem>
+            <NavbarItem><Link to="/login?logout">Sign Out</Link></NavbarItem>
           }
         </Navbar.Container>
       </Navbar.Menu>

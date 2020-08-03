@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 import Errors from './Errors';
 import MutationForm from './MutationForm';
-import { ACCEPT_TOKEN, AUTH, SEND_TOKEN } from './auth';
+import { ACCEPT_TOKEN, AUTH, LOGOUT, SEND_TOKEN } from './auth';
 import { RedirectSSR, useMutationSSR } from './ServerSideRender';
 
 function useParams() {
@@ -19,6 +19,9 @@ export default function Login() {
 
   if (params.has('token')) {
     return <LoginAcceptToken token={params.get('token')}/>;
+  }
+  if (params.has('logout')) {
+    return <Logout/>;
   }
 
   return <LoginSendToken/>;
@@ -84,4 +87,17 @@ function LoginSendToken({ message }) {
 
 function LoginSent({ data }) {
   return <div>{`Login link sent to ${data.sendToken}`}</div>;
+}
+
+function Logout()
+{
+  const [ logout, { loading, data, error } ] = useMutationSSR(LOGOUT);
+  const refetchQueries = [ { query: AUTH } ];
+  const effect = () => { logout({ refetchQueries }); };
+  useEffect(effect, []);
+
+  if (loading) return null;
+  if (error) return <Errors error={error}/>;
+  if (!data) return null;
+  return <RedirectSSR to='/login'/>;
 }
