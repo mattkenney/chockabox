@@ -8,6 +8,7 @@ module.exports = `
 
   type Mutation {
     acceptToken(token: String!): Boolean!
+    logout: Boolean!
     mutate: String!
     sendToken(email: String!): String
   }

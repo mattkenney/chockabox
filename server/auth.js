@@ -26,6 +26,11 @@ function auth(obj, args, context) {
   return !!context.user;
 }
 
+function logout(obj, args, context) {
+  context.logout();
+  return true;
+}
+
 function sendEmail(req, user, token) {
   const origin = config.origin || req.origin;
   const tokenParam = encodeURIComponent(token);
@@ -86,6 +91,7 @@ module.exports = app => {
   return {
     Mutation: {
       acceptToken,
+      logout,
       sendToken
     },
     Query: { auth }
