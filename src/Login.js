@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 
 import Errors from './Errors';
 import MutationForm from './MutationForm';
-import { ACCEPT_TOKEN, AUTH, LOGOUT, SEND_TOKEN } from './auth';
+import { ACCEPT_TOKEN, AUTH, LOGOUT, SEND_TOKEN } from './queries/auth';
 import { RedirectSSR, useMutationSSR } from './ServerSideRender';
 
 function useParams() {

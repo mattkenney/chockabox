@@ -1,9 +1,12 @@
 'use strict';
 
 module.exports = `
-  type Query {
-    auth: Boolean!
-    hello: String!
+  scalar Upload
+
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
   }
 
   type Mutation {
@@ -11,5 +14,11 @@ module.exports = `
     logout: Boolean!
     mutate: String!
     sendToken(email: String!): String
+    uploadDeck(name: String!, file: Upload!): File!
+  }
+
+  type Query {
+    auth: Boolean!
+    hello: String!
   }
 `;

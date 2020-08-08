@@ -4,7 +4,7 @@ import Navbar from 'react-bulma-components/lib/components/navbar';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import { AUTH } from './auth';
+import { AUTH } from './queries/auth';
 
 export default function Nav() {
   const { data, error } = useQuery(AUTH);

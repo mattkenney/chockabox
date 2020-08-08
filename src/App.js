@@ -9,6 +9,7 @@ import './App.sass';
 import Decks from './Decks';
 import Login from './Login';
 import Nav from './Nav';
+import Upload from './Upload';
 
 function About() {
   return <div>About</div>;
@@ -26,6 +27,7 @@ function Content() {
           <Route path="/about" component={About}/>
           <Route path="/login" component={Login}/>
           <Route path="/deck" component={Decks}/>
+          <Route path="/upload" component={Upload}/>
           <Route component={Home}/>
         </Switch>
       </Container>

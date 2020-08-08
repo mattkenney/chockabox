@@ -17,8 +17,14 @@ export default function MutationForm(props) {
     props.mutate({ variables });
   };
 
+  const attr = {
+    action: pathname,
+    method: 'post',
+    onSubmit
+  };
+  if (props.upload) attr.encType = 'multipart/form-data';
   return (
-    <form action={pathname} method="post" onSubmit={onSubmit}>
+    <form {...attr}>
       {props.children}
     </form>
   );

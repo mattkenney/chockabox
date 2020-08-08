@@ -12,6 +12,7 @@
     "deepmerge": "^4.2.2",
     "emailjs": "^3.2.1",
     "express": "^4.17.1",
+    "multer": "^1.4.2",
     "passport": "^0.4.1",
     "passport-magic-link": "^2.1.0",
     "react": "^16.13.1",

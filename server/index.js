@@ -29,6 +29,7 @@ const typeDefs = require('./typeDefs');
 const merge = require('deepmerge');
 let resolvers = require('./resolvers');
 resolvers = merge(resolvers, require('./auth')(app));
+resolvers = merge(resolvers, require('./decks')(app));
 const context = ({ req }) => ({
   login: req.login.bind(req),
   logout: req.logout.bind(req),
